@@ -1,12 +1,22 @@
-# http://module-build.sourceforge.net/META-spec.html
-#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
-name:         Tie-Hash-Interpolate
-version:      0.05
-version_from: Interpolate.pm
-installdirs:  site
-requires:
-    Scalar::Util:                  1.1
-    Test::More:                    0.01
-
-distribution_type: module
-generated_by: ExtUtils::MakeMaker version 6.17
+---
+name: Tie-Hash-Interpolate
+version: 0.06
+author:
+  - 'Dan Boorstein <danboo@cpan.org>'
+abstract: tied mathematical interpolation/extrapolation
+license: perl
+resources:
+  license: http://dev.perl.org/licenses/
+build_requires:
+  Scalar::Util: 0
+  Test::More: 0
+configure_requires:
+  Module::Build: 0.35
+provides:
+  Tie::Hash::Interpolate:
+    file: lib/Tie/Hash/Interpolate.pm
+    version: 0.06
+generated_by: Module::Build version 0.35
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4

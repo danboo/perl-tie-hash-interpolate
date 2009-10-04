@@ -8,7 +8,8 @@ my $builder = Module::Build->new(
     dist_author         => q{Dan Boorstein <danboo@cpan.org>},
     dist_version_from   => 'lib/Tie/Hash/Interpolate.pm',
     build_requires => {
-        'Test::More' => 0,
+        'Test::More'   => 0,
+        'Scalar::Util' => 0,
     },
     add_to_cleanup      => [ 'Tie-Hash-Interpolate-*' ],
     create_makefile_pl => 'traditional',

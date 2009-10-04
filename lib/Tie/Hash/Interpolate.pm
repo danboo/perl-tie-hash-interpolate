@@ -16,7 +16,7 @@ use constant ONE_KEY_FATAL    => 'fatal';
 use constant ONE_KEY_CONSTANT => 'constant';
 use constant ONE_KEY_UNDEF    => 'undef';
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 sub new
    {
@@ -190,6 +190,7 @@ sub _mx_plus_b
 
 1;
 __END__
+
 =head1 NAME
 
 Tie::Hash::Interpolate - tied mathematical interpolation/extrapolation
@@ -231,6 +232,12 @@ ignored), insert your known key-value pairs. If you then fetch a key that does
 not exist, an interpolation or extrapolation will be performed as necessary. If
 you fetch a key that does exist, the value stored for that key will be
 returned.
+
+=head1 FUNCTIONS
+
+=head2 new
+
+=cut
 
 =head1 OPTIONS
 
