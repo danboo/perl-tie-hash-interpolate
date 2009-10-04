@@ -36,9 +36,12 @@ sub _value
 
         return mx_plus_b( $key, $x_dn, $x_up, $lower, $upper );
         };
+        
+  my $recurse = ref $lower || ref $upper;
 
-  return ( ref $lower || ref $upper ) ? $interp : $interp->($key);
-
+  return $recurse
+       ? $interp
+       : $interp->($key);
   }
 
 sub mx_plus_b
