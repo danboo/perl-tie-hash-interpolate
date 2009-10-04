@@ -1,10 +1,20 @@
-use 5.006;
+use strict;
+use warnings;
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
-    NAME         => 'Tie::Hash::Interpolate',
-    VERSION_FROM => 'Interpolate.pm',
-    PREREQ_PM    => { Scalar::Util => 1.10,
-                      Test::More   => 0.01, },
-    $] >= 5.005 ?  (AUTHOR => 'Daniel B. Boorstein <danboo@cpan.org>') : (),
+    NAME                => 'Tie::Hash::Interpolate',
+    AUTHOR              => q{Dan Boorstein <danboo@cpan.org>},
+    VERSION_FROM        => 'lib/Tie/Hash/Interpolate.pm',
+    ABSTRACT_FROM       => 'lib/Tie/Hash/Interpolate.pm',
+    ($ExtUtils::MakeMaker::VERSION >= 6.3002
+      ? ('LICENSE'=> 'perl')
+      : ()),
+    PL_FILES            => {},
+    PREREQ_PM => {
+        'Test::More'   => 0,
+        'Scalar::Util' => 0,
+    },
+    dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
+    clean               => { FILES => 'Tie-Hash-Interpolate-*' },
 );

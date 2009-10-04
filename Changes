@@ -1,5 +1,8 @@
 Revision history for Perl extension Tie::Hash::Interpolate.
 
+0.06 Sun Oct 4 2009
+   - modernized distribution
+
 0.05  Wed Feb 25 2004
    - documentation fixes
 
