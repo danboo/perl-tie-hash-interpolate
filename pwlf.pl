@@ -3,8 +3,6 @@ package pwlf;
 use warnings;
 use strict;
 
-use Want 'want';
-
 use Contextual::Return;
 
 sub new
@@ -29,14 +27,9 @@ sub _value
   my $lower = $self->{'_data'}{$x_dn};
   my $upper = $self->{'_data'}{$x_up};
 
-  if ( ref $lower || ref $upper )
-     {
-
-     return sub
+  my $interp = sub
         {
         my $k = shift();
-
-        print "branch: ( $lower $upper )->( $key )\n";
 
         $lower = ref $lower ? $lower->_value($k) : $lower;
         $upper = ref $upper ? $upper->_value($k) : $upper;
@@ -44,15 +37,7 @@ sub _value
         return mx_plus_b( $key, $x_dn, $x_up, $lower, $upper );
         };
 
-     }
-  else
-     {
-
-     print "leaf: ( $lower $upper )->( $key )\n";
-
-     return mx_plus_b( $key, $x_dn, $x_up, $lower, $upper );
-
-     }
+  return ( ref $lower || ref $upper ) ? $interp : $interp->($key);
 
   }
 
