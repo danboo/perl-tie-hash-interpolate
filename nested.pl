@@ -4,6 +4,9 @@ use warnings;
 use strict;
 
 use Carp;
+
+#$SIG{'__WARN__'} = \&Carp::confess;
+
 use Contextual::Return;
 
 sub TIEHASH
@@ -56,9 +59,43 @@ sub FETCH
          ## if in REF context and the key does not exist
          ## auto-vivify a nested tied hash
 
-         return exists $self->{'_pwlf'}{ $key }
-              ? $self->{'_pwlf'}{ $key }
-              : STORE( $self, $key, {} );
+         if ( ! exists $self->{'_pwlf'}{ $key } )
+            {
+            return STORE( $self, $key, {} );
+            }
+         else
+            {
+            
+            ## in REF context, if the key exists, we need to return an object
+            ## that can unwind a series of STORE calls or a series of
+            ## interp calls
+            
+            my $lo_x = 0;
+            my $hi_x = 2;
+            
+            my $lo_y = $self->{'_pwlf'}{$lo_x};
+            my $hi_y = $self->{'_pwlf'}{$hi_x};
+            
+            print "y-s: $lo_y $hi_y\n";
+            
+            my $interp = sub
+               {
+               my $x = shift();
+
+               $lo_y = ref $lo_y ? $lo_y->{$x} : $lo_y;
+               $hi_y = ref $hi_y ? $hi_y->{$x} : $hi_y;
+
+               return mx_plus_b( $key, $lo_x, $hi_x, $lo_y, $hi_y );
+               };
+                 
+            my $recurse = ref $lo_y || ref $hi_y;
+            
+            return $recurse
+                 ? $interp
+                 : $interp->($key);
+               
+            
+            }
             
          }
       DEFAULT
@@ -68,68 +105,30 @@ sub FETCH
          ## interpolate
          
          my $lo_x = 0;
-         my $hi_x = 10;
+         my $hi_x = 2;
          
          my $lo_y = $self->{'_pwlf'}{$lo_x};
          my $hi_y = $self->{'_pwlf'}{$hi_x};
          
+         print "y-s: $lo_y $hi_y\n";
+         
+         my $interp = sub
+            {
+            my $x = shift();
+
+            $lo_y = ref $lo_y ? $lo_y->{$x} : $lo_y;
+            $hi_y = ref $hi_y ? $hi_y->{$x} : $hi_y;
+
+            return mx_plus_b( $key, $lo_x, $hi_x, $lo_y, $hi_y );
+            };
+              
          my $recurse = ref $lo_y || ref $hi_y;
          
-         if ( $recurse )
-            {
-            ## hard part goes here
-            }
-         else
-            {
-            return mx_plus_b( $key, $lo_x, $hi_x, $lo_y, $hi_y );
-            }
+         return $recurse
+              ? $interp
+              : $interp->($key);
 
          };
-
-#   
-#   ## return undef so perl will auto-vivify
-#   if ( ! exists $self->{'_pwlf'}{$key} )
-#      {
-#      return;
-#      }
-#
-#   my $val = $self->{'_pwlf'}{$key};
-#   
-#   ## if the value is a reference link it to the current object
-#   if ( ref $val )
-#      {
-#      my $tied_object            = tied %{ $val };
-#      $tied_object->{'_up_link'} = { object => $self, key => $key };
-#      $self->{'_dn_link'}        = $tied_object;
-#      return $val;
-#      }
-#   else
-#      {
-#      
-#      my $derived_value;
-#      
-#      my $iter = $self;
-#      
-#      while ( $iter )
-#         {
-#         
-#         ## be sure the doubly linked list is valid
-#                  
-#         my $dn_up_obj = $iter->{'_dn_link'}{'_up_link'}{'object'};
-#
-#         last if $dn_up_obj && $iter != $dn_up_obj;
-#         
-#         my $up_link = $iter->{'_up_link'};
-#         
-#         $derived_value += $key;
-#
-#         $key  = $up_link->{'key'};
-#         $iter = $up_link->{'object'};
-#
-#         }
-#         
-#      return $derived_value;
-#      }
 
    }
    
@@ -154,12 +153,14 @@ my %foo;
 
 tie %foo, 'foo';
 
-$foo{0}  = 0;
-$foo{10} = 1;
+$foo{0}{0}  = 0;
+$foo{0}{2}  = 2;
+$foo{2}{0}  = 0;
+$foo{2}{2}  = 4;
 
 print $foo{1} . "\n";
 
-use Data::Dumper;
+#use Data::Dumper;
 
 #print Dumper \%foo;
 
