@@ -12,7 +12,14 @@ my $builder = Module::Build->new(
         'Scalar::Util' => 0,
     },
     add_to_cleanup      => [ 'Tie-Hash-Interpolate-*' ],
-    create_makefile_pl => 'traditional',
+    create_makefile_pl  => 'traditional',
+    meta_merge          =>
+       {
+       resources =>
+          {
+          repository  => 'http://github.com/danboo/perl-tie-hash-interpolate/',
+          }
+       },
 );
 
 $builder->create_build_script();

@@ -4,7 +4,5 @@ MANIFEST
 Makefile.PL
 README
 lib/Tie/Hash/Interpolate.pm
-t/00-load.t
-t/pod-coverage.t
-t/pod.t
+t/01-basic.t
 META.yml

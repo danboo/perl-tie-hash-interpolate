@@ -16,7 +16,7 @@ use constant ONE_KEY_FATAL    => 'fatal';
 use constant ONE_KEY_CONSTANT => 'constant';
 use constant ONE_KEY_UNDEF    => 'undef';
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 sub new
    {
@@ -194,6 +194,10 @@ __END__
 =head1 NAME
 
 Tie::Hash::Interpolate - tied mathematical interpolation/extrapolation
+
+=head1 VERSION
+
+Version 0.07
 
 =head1 SYNOPSIS
 
